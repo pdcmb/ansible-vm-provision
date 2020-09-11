@@ -1,1 +1,2 @@
-# CentOS_docker[![Build Status](https://travis-ci.com/pdcmb/ansible-vm-provision.svg?branch=master)](https://travis-ci.com/pdcmb/ansible-vm-provision)
+# ansible-vm-provision[![Build Status](https://travis-ci.com/pdcmb/ansible-vm-provision.svg?branch=master)](https://travis-ci.com/pdcmb/ansible-vm-provision)
+Ansible playbook that creates azure virtual machines and installs docker on them
