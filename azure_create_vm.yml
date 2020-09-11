@@ -1,0 +1,59 @@
+---
+- name: Create resource group
+  azure_rm_resourcegroup:
+    name: "{{ azure_resource_group }}"
+    location: "{{ azure_location }}"
+- name: Create virtual network
+  azure_rm_virtualnetwork:
+    resource_group: "{{ azure_resource_group }}"
+    name: "{{ azure_vnet }}{{ item }}"
+    address_prefixes: "10.0.0.0/16"
+- name: Add subnet
+  azure_rm_subnet:
+    resource_group: "{{ azure_resource_group }}"
+    name: "{{ azure_subnet }}{{ item }}"
+    address_prefix: "10.0.1.0/24"
+    virtual_network: "{{ azure_vnet }}{{ item }}"
+- name: Create public IP address
+  azure_rm_publicipaddress:
+    resource_group: "{{ azure_resource_group }}"
+    allocation_method: Static
+    name: "{{ azure_public_ip }}{{ item }}"
+  register: output_ip_address
+- name: Add host to group 
+  add_host:
+    name: '{{ output_ip_address.state.ip_address }}'
+    groups: vms
+- name: Create Network Security Group that allows SSH
+  azure_rm_securitygroup:
+    resource_group: "{{ azure_resource_group }}"
+    name: "{{ azure_security_group }}{{ item }}"
+    rules:
+      - name: SSH
+        protocol: Tcp
+        destination_port_range: 22
+        access: Allow
+        priority: 1001
+        direction: Inbound
+- name: Create virtual network interface card
+  azure_rm_networkinterface:
+    resource_group: "{{ azure_resource_group }}"
+    name: "{{ azure_nic }}{{ item }}"
+    virtual_network: "{{ azure_vnet }}"
+    subnet: "{{ azure_subnet }}"
+    public_ip_name: "{{ azure_public_ip }}"
+    security_group: "{{ azure_security_group }}"
+- name: Create VM
+  azure_rm_virtualmachine:
+    resource_group: "{{ azure_resource_group }}"
+    name: "{{ azure_vm_name }}"
+    vm_size: Standard_DS1_v2
+    admin_username: azureuser
+    ssh_password_enabled: true
+    admin_password: "Pa$$word" 
+    network_interfaces: "{{ azure_nic }}"
+    image:
+      offer: CentOS
+      publisher: OpenLogic
+      sku: '7.5'
+      version: latest

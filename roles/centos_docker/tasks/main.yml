@@ -1,0 +1,54 @@
+---
+- name: Install required packages
+  yum:
+    name: "{{ packages }}"
+    state: latest
+    update_cache: yes
+  vars:
+    packages:
+      - python3-setuptools
+      - python3-pip
+      - yum-utils
+      - lvm2
+
+- name: Remove docker if installed from CentOS repo
+  yum:
+    name: "{{ docker_versions }}"
+    state: removed
+  vars:
+    docker_versions:
+      - docker
+      - docker-client
+      - docker-client-latest
+      - docker-common
+      - docker-latest
+      - docker-latest-logrotate
+      - docker-logrotate
+      - docker-engine
+
+- name: Add Docker repository
+  command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+- name: Install Docker
+  yum:
+    name: docker-ce
+    state: latest
+    update_cache: yes
+
+- name: Add user to docker group
+  user:
+    name: "{{ user_name }}"
+    groups: docker
+    append: yes
+  become: yes
+
+- name: Installing Docker SDK for python3
+  command: pip3 install docker
+
+- name: Start and enable docker service
+  service:
+    name: "docker"
+    state: started
+    enabled: yes
+
+

@@ -1,0 +1,26 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: azure
+lint: |
+  set -e
+  yamllint . -d relaxed
+platforms:
+  - name: example-role-bionic
+    resource_group_name: rg_molecule
+    location: westeurope
+    vm_size: Standard_B1s
+    virtual_network_name: molecule_vnet
+    subnet_name: molecule_subnet
+    image:
+      offer: CentOS
+      publisher: OpenLogic
+      sku: 7.5
+      version: latest
+provisioner:
+  name: ansible
+scenario:
+  name: azure_centos
+verifier:
+  name: ansible
