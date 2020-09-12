@@ -1,4 +1,9 @@
 ---
+- name: Enable EPEL Repository on CentOS 7
+  yum:
+    name: epel-release
+    state: present
+
 - name: Install required packages
   yum:
     name: "{{ packages }}"
@@ -6,8 +11,8 @@
     update_cache: yes
   vars:
     packages:
-      - python3-setuptools
-      - python3-pip
+      - python-pip
+      - python-setuptools
       - yum-utils
       - lvm2
 
@@ -26,10 +31,20 @@
       - docker-logrotate
       - docker-engine
 
+- name: "Check if Docker is installed"
+  package_facts:
+    manager: "auto"
+
+- name: Check if docker-ce.repo exists
+  stat:
+    path: /etc/yum.repos.d/docker-ce.repo
+  register: stat_result
+
 - name: Add Docker repository
   command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  when: not stat_result.stat.exists
 
-- name: Install Docker
+- name: Install Docker ce
   yum:
     name: docker-ce
     state: latest
@@ -37,13 +52,16 @@
 
 - name: Add user to docker group
   user:
-    name: "{{ user_name }}"
+    name: "{{ username }}"
     groups: docker
     append: yes
   become: yes
 
-- name: Installing Docker SDK for python3
-  command: pip3 install docker
+- name: Installing Docker SDK for python
+  pip:
+    name:
+      - docker
+    state: present
 
 - name: Start and enable docker service
   service:

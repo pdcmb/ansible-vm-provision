@@ -7,31 +7,34 @@ Requirements
 ------------
 
 
-
 Role Variables
 --------------
-
-- ```docker_edition``` docker edition to install, can be ```ce | ee``` 
-- ```docker_containers_number``` container to create
-- ```docker_container_name``` name of created container
-- ```docker_container_image```: image to deploy in the container
-- ```docker_packages```: packages required in order to install docker. **Should not be changed**
-
 
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
-
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+You can specify username (it will be added to docker group)
 
-    - hosts: servers
+    - hosts: vms
       roles:
-         - { role: username.rolename, x: 42 }
+        - role: centos_docker
+        vars:
+          username: username
+
+Or using newer syntax:
+
+    - hosts: vms
+      tasks:
+        - include_role:
+            name: centos_docker
+          vars:
+            username: username
+          
+
 
 License
 -------
@@ -41,4 +44,4 @@ BSD
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Ziomek Mateusz
