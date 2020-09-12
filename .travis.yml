@@ -3,10 +3,10 @@ language: python
 python:
 - '3.8'
 install:
-- pip install molecule docker ansible-lint
+- pip install molecule docker yamllint
 script:
 - molecule --version
 - ansible --version
-- ansible-lint main.yml 
+- yamllint main.yml 
 - cd roles/centos_docker
 - molecule test 

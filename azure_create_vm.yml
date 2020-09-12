@@ -6,28 +6,30 @@
 - name: Create virtual network
   azure_rm_virtualnetwork:
     resource_group: "{{ azure_resource_group }}"
-    name: "{{ azure_vnet }}{{ item }}"
+    name: "{{ azure_vnet }}{{ item.id }}"
     address_prefixes: "10.0.0.0/16"
 - name: Add subnet
   azure_rm_subnet:
     resource_group: "{{ azure_resource_group }}"
-    name: "{{ azure_subnet }}{{ item }}"
+    name: "{{ azure_subnet }}{{ item.id }}"
     address_prefix: "10.0.1.0/24"
-    virtual_network: "{{ azure_vnet }}{{ item }}"
+    virtual_network: "{{ azure_vnet }}{{ item.id }}"
 - name: Create public IP address
   azure_rm_publicipaddress:
     resource_group: "{{ azure_resource_group }}"
     allocation_method: Static
-    name: "{{ azure_public_ip }}{{ item }}"
+    name: "{{ azure_public_ip }}{{ item.id }}"
   register: output_ip_address
 - name: Add host to group 
   add_host:
     name: '{{ output_ip_address.state.ip_address }}'
     groups: vms
+    ansible_user: "{{ item.username }}"
+    ansible_password: "{{ item.password }}"
 - name: Create Network Security Group that allows SSH
   azure_rm_securitygroup:
     resource_group: "{{ azure_resource_group }}"
-    name: "{{ azure_security_group }}{{ item }}"
+    name: "{{ azure_security_group }}{{ item.id }}"
     rules:
       - name: SSH
         protocol: Tcp
@@ -38,7 +40,7 @@
 - name: Create virtual network interface card
   azure_rm_networkinterface:
     resource_group: "{{ azure_resource_group }}"
-    name: "{{ azure_nic }}{{ item }}"
+    name: "{{ azure_nic }}{{ item.id }}"
     virtual_network: "{{ azure_vnet }}"
     subnet: "{{ azure_subnet }}"
     public_ip_name: "{{ azure_public_ip }}"
@@ -48,9 +50,9 @@
     resource_group: "{{ azure_resource_group }}"
     name: "{{ azure_vm_name }}"
     vm_size: Standard_DS1_v2
-    admin_username: azureuser
+    admin_username: "{{ item.username }}"
     ssh_password_enabled: true
-    admin_password: "Pa$$word" 
+    admin_password: "{{ item.password }}" 
     network_interfaces: "{{ azure_nic }}"
     image:
       offer: CentOS

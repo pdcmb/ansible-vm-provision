@@ -1,0 +1,9 @@
+---
+azure_resource_group: myResourceGroup
+azure_location: westeurope
+azure_vnet: myVnet
+azure_subnet: mySubnet
+azure_security_group: myNetworkSecurityGroup
+azure_nic: myNIC
+azure_public_ip: myPublicIP
+azure_vm_name: myVM
