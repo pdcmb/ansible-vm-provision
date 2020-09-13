@@ -3,7 +3,7 @@ language: python
 python:
 - '3.8'
 install:
-- pip install molecule docker yamllint
+- pip install molecule docker yamllint ansible-lint
 script:
 - molecule --version
 - ansible --version
