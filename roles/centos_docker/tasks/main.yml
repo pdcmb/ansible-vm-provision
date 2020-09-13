@@ -2,12 +2,10 @@
 - name: Enable EPEL Repository on CentOS 7
   yum:
     name: epel-release
-    state: present
 
 - name: Install required packages
   yum:
     name: "{{ packages }}"
-    state: latest
     update_cache: yes
   vars:
     packages:
@@ -47,7 +45,6 @@
 - name: Install Docker ce
   yum:
     name: docker-ce
-    state: latest
     update_cache: yes
 
 - name: Add user to docker group

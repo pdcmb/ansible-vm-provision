@@ -20,7 +20,7 @@
     allocation_method: Static
     name: "{{ azure_public_ip }}{{ item.id }}"
   register: output_ip_address
-- name: Add host to group 
+- name: Add host to group
   add_host:
     name: '{{ output_ip_address.state.ip_address }}'
     groups: vms
@@ -52,7 +52,7 @@
     vm_size: Standard_DS1_v2
     admin_username: "{{ item.username }}"
     ssh_password_enabled: true
-    admin_password: "{{ item.password }}" 
+    admin_password: "{{ item.password }}"
     network_interfaces: "{{ azure_nic }}"
     image:
       offer: CentOS
