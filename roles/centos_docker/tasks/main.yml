@@ -29,10 +29,6 @@
       - docker-logrotate
       - docker-engine
 
-- name: "Check if Docker is installed"
-  package_facts:
-    manager: "auto"
-
 - name: Check if docker-ce.repo exists
   stat:
     path: /etc/yum.repos.d/docker-ce.repo
