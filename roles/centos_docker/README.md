@@ -3,17 +3,6 @@ Role Name
 
 Ansible role that installs and configures docker on CentOS
 
-Requirements
-------------
-
-
-Role Variables
---------------
-
-
-Dependencies
-------------
-
 Example Playbook
 ----------------
 
@@ -39,7 +28,7 @@ Or using newer syntax:
 License
 -------
 
-BSD
+MIT
 
 Author Information
 ------------------

@@ -2,8 +2,9 @@
 - name: Create VM
   hosts: localhost
   connection: local
-  include_tasks: azure_create_vm.yml
-  loop: "{{ users }}"
+  tasks:
+    - include_tasks: azure_create_vm.yml
+      loop: "{{ users }}"
 
 
 - name: Install docker

@@ -6,9 +6,19 @@ driver:
 lint: |
   set -e
   yamllint . -d relaxed
+  ansible-lint
 platforms:
-  - name: centos
-    image: centos/systemd:latest
+  - name: centos7
+    image: centos/systemd:7
+    privileged: true
+    command: /sbin/init
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  - name: centos8
+    image: centos/systemd:8
     privileged: true
     command: /sbin/init
     tmpfs:
