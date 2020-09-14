@@ -7,3 +7,4 @@ azure_security_group: myNetworkSecurityGroup
 azure_nic: myNIC
 azure_public_ip: myPublicIP
 azure_vm_name: myVM
+azure_disk_size: 128

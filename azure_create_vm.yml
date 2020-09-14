@@ -54,6 +54,7 @@
     ssh_password_enabled: true
     admin_password: "{{ item.password }}"
     network_interfaces: "{{ azure_nic }}{{ item.id }}"
+    os_disk_size_gb: "{{{ azure_disk_size }}}"
     image:
       offer: CentOS
       publisher: OpenLogic
